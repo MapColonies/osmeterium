@@ -51,10 +51,10 @@ def run_command(command: str,
 
 
 def run_command_async(command: str,
-                            on_stdout_output: Callable[[str], None],
-                            on_stderr_output: Callable[[str], None],
-                            on_process_fail: Callable[[int], None],
-                            on_process_success: Callable[[], None]) -> Thread:
+                        on_stdout_output: Callable[[str], None] = do_nothing,
+                        on_stderr_output: Callable[[str], None] = do_nothing,
+                        on_process_fail: Callable[[int], None] = do_nothing,
+                        on_process_success: Callable[[], None] = do_nothing) -> Thread:
     command_thread = Thread(target=run_command, args=(command, on_stdout_output, on_stderr_output, on_process_fail, on_process_success))
     command_thread.daemon = True
     command_thread.start()
