@@ -5,13 +5,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="osmeterium", 
-    version="0.0.1",
+    version="0.0.2",
     author="MapColonies",
     author_email="mapcolonies@gmail.com",
     description="A wrapper for subprocess popen",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/MapColonies/json-logger",
+    url="https://github.com/MapColonies/osmeterium",
     packages=setuptools.find_packages(),
     install_requires=[
     ],

@@ -1,6 +1,6 @@
 import subprocess
 from threading import Thread
-from typing import Callable
+from typing import Callable, Union
 
 
 def get_command_std_iter(process_std):
@@ -10,7 +10,6 @@ def get_command_std_iter(process_std):
 
 def read_from_pipe(process_std, on_output):
     for stdout_line in get_command_std_iter(process_std):
-        # not twice
         stripped_line = stdout_line.strip()
         if len(stripped_line) > 0:
             on_output(stripped_line)
@@ -23,16 +22,20 @@ def create_read_stream_thread(process_std, on_output):
     return thread
 
 
+def do_nothing(useless: str) -> None:
+    pass
+
+
 def run_command(command: str,
-                on_stdout_output: Callable[[str], None],
-                on_stderr_output: Callable[[str], None],
-                on_process_fail: Callable[[int], None],
-                on_process_success: Callable[[], None]) -> None:
+                on_stdout_output: Callable[[str], None] = do_nothing,
+                on_stderr_output: Callable[[str], None] = do_nothing,
+                on_process_fail: Callable[[str], None] = do_nothing,
+                on_process_success: Callable[[str], None] = do_nothing) -> None:
     process = subprocess.Popen(command,
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
                         universal_newlines=True,
-                        shell=True) 
+                        shell=True)
     thread_stdout = create_read_stream_thread(process.stdout, on_stdout_output)
     thread_stderr = create_read_stream_thread(process.stderr, on_stderr_output)
 
